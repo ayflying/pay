@@ -2,15 +2,10 @@ package pay
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/ayflying/pay/playstore"
 	"github.com/gogf/gf/v2/errors/gerror"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/os/gctx"
-)
-
-var (
-	ctx = gctx.New()
 )
 
 // GooglePay是一个处理Google支付的结构体。
@@ -39,7 +34,8 @@ func (p *GooglePay) Init(data []byte) {
 func (p *GooglePay) VerifyPay(userId int64, OrderId, package1, subscriptionID, purchaseToken string, cb func(string, string) error) error {
 	info, err := p.c.VerifyProduct(context.Background(), package1, subscriptionID, purchaseToken)
 	if err != nil {
-		return gerror.Cause(err) // 验证产品失败，返回错误。
+		//验证产品失败，返回错误。
+		return gerror.Cause(err)
 	}
 	if info.PurchaseState == 0 {
 		if err := cb(subscriptionID, info.OrderId); err != nil {
@@ -58,7 +54,7 @@ func (p *GooglePay) VerifyPay(userId int64, OrderId, package1, subscriptionID, p
 // cb: 验证结果的回调函数。
 // 返回值: 执行错误。
 func (p *GooglePay) VerifyPayV1(package1, subscriptionID, purchaseToken string, cb func(string, string) error) error {
-	g.Log().Infof(ctx, "VerifyPayV1: package = %v subscriptionID = %v, purchaseToken = %v", package1, subscriptionID, purchaseToken)
+	fmt.Printf("VerifyPayV1: package = %v subscriptionID = %v, purchaseToken = %v", package1, subscriptionID, purchaseToken)
 	info, err := p.c.VerifyProduct(context.Background(), package1, subscriptionID, purchaseToken)
 	if err != nil {
 		return gerror.Cause(err) // 验证产品失败，返回错误。
@@ -81,7 +77,8 @@ func (p *GooglePay) VerifyPayV1(package1, subscriptionID, purchaseToken string, 
 // cb: 验证结果的回调函数。
 // 返回值: 执行错误。
 func (p *GooglePay) VerifyPayV2(types int32, package1, subscriptionID, purchaseToken string, cb func(string, string) error) error {
-	g.Log().Infof(ctx, "VerifyPayV1: package = %v subscriptionID = %v, purchaseToken = %v", package1, subscriptionID, purchaseToken)
+	fmt.Printf("VerifyPayV1: package = %v subscriptionID = %v, purchaseToken = %v", package1, subscriptionID, purchaseToken)
+
 	switch types {
 	case 0:
 		info, err := p.c.VerifyProduct(context.Background(), package1, subscriptionID, purchaseToken)
